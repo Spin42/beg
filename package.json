@@ -1,0 +1,29 @@
+{
+  "author": "Djengo <it@djengo.net>",
+  "name": "beg",
+  "version": "0.0.0-alpha",
+  "description": "Fast and simple HTTP request node module",
+  "main": "lib/main",
+  "scripts": {
+    "test": "echo \"No tests yet.\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Djengo/beg.git"
+  },
+  "keywords": [
+    "HTTP",
+    "HTTPS"
+  ],
+  "dependencies": {
+    "coffee-script": "~1.4.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/Djengo/beg/LICENSE"
+    }
+  ],
+  "readmeFilename": "README.md",
+  "license": "MIT"
+}
