@@ -2,10 +2,8 @@ url   = require "url"
 http  = require "http"
 https = require "https"
 
-request = (options, parseJson, callback) ->
-  [parseJson, callback] = [false, parseJson] unless callback?
-
-  if options.secure? and options.secure
+request = (options, {secure, parseJson, binary}, callback) ->
+  if (secure? and secure) or (/^https:\/\//.test options) 
     client = https
   else
     client = http
@@ -15,11 +13,13 @@ request = (options, parseJson, callback) ->
       callback err
 
     response = ""
+    res.setEncoding("binary") if binary? and binary
     res.on "data", (chunk) ->
       response += chunk
 
     res.on "end", ->
       response = JSON.parse response if parseJson?
+
       callback null, response
 
   req.on "error", (err) ->
