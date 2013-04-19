@@ -1,7 +1,7 @@
 {
   "author": "Djengo <it@djengo.net>",
   "name": "beg",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "description": "Fast and simple HTTP request node module",
   "main": "lib/main",
   "scripts": {
