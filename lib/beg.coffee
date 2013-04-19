@@ -3,11 +3,15 @@ http  = require "http"
 https = require "https"
 
 request = (options, {secure, parseJson, binary}, callback) ->
-  if (secure? and secure) or (/^https:\/\//.test options) 
+  if (secure? and secure) or (/^https:\/\//.test options)
     client = https
   else
     client = http
-  
+
+  if options.payload? and (options.method is "POST" or options.method is "PUT")
+    options.headers ||= {}
+    options.headers["Content-Type"] = "application/json"
+
   req = client.request options, (res) ->
     res.on "error", (err) ->
       callback err
@@ -20,14 +24,14 @@ request = (options, {secure, parseJson, binary}, callback) ->
     res.on "end", ->
       response = JSON.parse response if parseJson?
 
-      callback null, response
+      callback null, response, res
 
   req.on "error", (err) ->
     callback err
 
   if options.payload? and (options.method is "POST" or options.method is "PUT")
     body = JSON.stringify options.payload
-    req.write(body) 
+    req.write(body)
 
   req.end()
 
