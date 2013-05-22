@@ -1,6 +1,7 @@
-url   = require "url"
-http  = require "http"
-https = require "https"
+url         = require "url"
+http        = require "http"
+https       = require "https"
+querystring = require('querystring');
 
 request = (options, {secure, parseJson, binary}, callback) ->
   if (secure? and secure) or (/^https:\/\//.test options)
@@ -11,6 +12,9 @@ request = (options, {secure, parseJson, binary}, callback) ->
   if options.payload? and (options.method is "POST" or options.method is "PUT")
     options.headers ||= {}
     options.headers["Content-Type"] = "application/json"
+  else if options.formData? and (options.method is "POST" or options.method is "PUT")
+    options.headers ||= {}
+    options.headers["Content-Type"] = "application/x-www-form-urlencoded"
 
   req = client.request options, (res) ->
     res.on "error", (err) ->
@@ -31,8 +35,10 @@ request = (options, {secure, parseJson, binary}, callback) ->
 
   if options.payload? and (options.method is "POST" or options.method is "PUT")
     body = JSON.stringify options.payload
-    req.write(body)
-
+    req.write body
+  else if options.formData? and (options.method is "POST" or options.method is "PUT")
+    body = querystring.stringify options.formData
+    req.write body
   req.end()
 
 get = (options, parseJson, callback) ->
