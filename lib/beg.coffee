@@ -26,7 +26,6 @@ request = (options, {secure, parseJson, binary}, callback) ->
       response += chunk
 
     res.on "end", ->
-      console.log "[DEBUG] ", options.hostname, options.path, response
       response = JSON.parse response if parseJson?
 
       callback null, response, res
