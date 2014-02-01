@@ -3,6 +3,12 @@ http        = require "http"
 https       = require "https"
 querystring = require('querystring');
 
+_tryParseJSON = (jsonString) ->
+  try
+    o = JSON.parse(jsonString)
+    return o if o and typeof o is "object" and o isnt null
+  false
+
 request = (options, {secure, parseJson, binary}, callback) ->
   if (secure? and secure) or (/^https:\/\//.test options)
     client = https
@@ -26,9 +32,12 @@ request = (options, {secure, parseJson, binary}, callback) ->
       response += chunk
 
     res.on "end", ->
-      response = JSON.parse response if parseJson?
+      response = _tryParseJSON(response) if parseJson?
 
-      callback null, response, res
+      if parseJson? and response is false
+        callback null, {}, res
+      else
+        callback null, response, res
 
   req.on "error", (err) ->
     callback err
